@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sampler</title>
+
+    <style>
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        background: #000;
+      }
+
+      button {
+        border: 0;
+        background: #ccc;
+        font-size: 5vmax;
+        padding: 4rem 2rem;
+        margin: 2rem;
+        cursor: pointer;
+
+        transition: all 250ms ease-in;
+      }
+      .green {
+        background: green;
+      }
+      button:hover {
+        opacity: 0.8;
+      }
+      audio {
+        visibility: hidden;
+        height: 1px;
+        width: 1px;
+        position: absolute;
+      }
+    </style>
+  </head>
+  <body>
+    <button value="quiz_jingle">Jingle</button>
+    <button value="quiz_correct">Correct</button>
+    <button value="quiz_wrong">Wrong</button>
+
+    <audio controls src="./quiz_jingle.mp3" id="quiz_jingle">
+      Your browser does not support the
+      <code>audio</code> element.
+    </audio>
+    <audio controls src="./quiz_correct.mp3" id="quiz_correct">
+      Your browser does not support the
+      <code>audio</code> element.
+    </audio>
+    <audio controls src="./quiz_wrong.mp3" id="quiz_wrong">
+      Your browser does not support the
+      <code>audio</code> element.
+    </audio>
+
+    <script>
+      (function () {
+        Array.from(document.querySelectorAll("button")).forEach(function (el) {
+          el.addEventListener("click", play);
+        });
+        Array.from(document.querySelectorAll("audio")).forEach(function (el) {
+          const target = document.querySelector("button[value=" + el.id + "]");
+          if (!target) return;
+
+          el.addEventListener("playing", function (e) {
+            target.classList.toggle("green", true);
+          });
+          el.addEventListener("ended", function (e) {
+            target.classList.toggle("green", false);
+          });
+        });
+
+        function play(e) {
+          e.preventDefault();
+          const target = document.querySelector("#" + e.currentTarget.value);
+          if (target && !target.classList.contains("green")) {
+            target.play();
+          }
+        }
+      })();
+    </script>
+  </body>
+</html>
